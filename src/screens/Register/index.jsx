@@ -29,7 +29,7 @@ const Register = () => {
     }
 
     return (
-        <Center w="100%" flex={1} backgroundColor={'#272a3f'}>
+        <Center w="100%" flex={1} backgroundColor='#272a3f'>
             <Box p="2" py="8" w="80%">
                 <VStack space={3} mt="5">
                     <Logo/>
@@ -42,6 +42,7 @@ const Register = () => {
                                     onChangeText={text => onChange(text)}
                                 />
                             )}
+                            shouldUnregister={true}
                             name='username'
                             rules={{
                                 required: 'Please enter username',
@@ -68,6 +69,7 @@ const Register = () => {
                                     onChangeText={text => onChange(text)}
                                 />
                             )}
+                            shouldUnregister={true}
                             name='tel'
                             rules={{
                                 required: 'Please enter phone number',
@@ -96,6 +98,7 @@ const Register = () => {
                                     }
                                 />
                             )}
+                            shouldUnregister={true}
                             name='password'
                             rules={{
                                 required: 'Please enter password',
@@ -119,6 +122,7 @@ const Register = () => {
                                     onChangeText={text => onChange(text)}
                                 />
                             )}
+                            shouldUnregister={true}
                             name='confirmPwd'
                             rules={{
                                 required: 'Please enter confirm password',

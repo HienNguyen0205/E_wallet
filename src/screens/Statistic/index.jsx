@@ -79,9 +79,8 @@ const Statistic = () => {
     return (
         <Box bg='#171928' flex={1} p="4" py="6" mb='3'>
             <Stack direction='row' p={3} bg='#2e303c' borderRadius='2xl' my={3} justifyContent='space-around'>
-                <Button onPress={() => setActiveIndex(0)} w='30%' bg={activeIndex === 0 ? '#f66d97' : '#2e303c'}>All</Button>
-                <Button onPress={() => setActiveIndex(1)} w='30%' bg={activeIndex === 1 ? '#f66d97' : '#2e303c'}>Income</Button>
-                <Button onPress={() => setActiveIndex(2)} w='30%' bg={activeIndex === 2 ? '#f66d97' : '#2e303c'}>Expend</Button>
+                <Button onPress={() => setActiveIndex(0)} w='48%' bg={activeIndex === 0 ? '#f66d97' : '#2e303c'}>Income</Button>
+                <Button onPress={() => setActiveIndex(1)} w='48%' bg={activeIndex === 1 ? '#f66d97' : '#2e303c'}>Expend</Button>
             </Stack>
             <Stack direction='row' justifyContent='space-between' alignItems='center' mb={3}>
                 <Text color='white' fontSize={28} fontWeight='bold'>$ 100000000</Text>

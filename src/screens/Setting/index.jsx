@@ -3,7 +3,7 @@ import { Stack, Box } from 'native-base'
 
 const Setting = () => {
     return (
-        <Stack>
+        <Stack w="100%" flex={1} backgroundColor='#272a3f'>
 
         </Stack>
     )

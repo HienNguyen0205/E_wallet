@@ -40,6 +40,7 @@ const Login = () => {
                                     onChangeText={text => onChange(text)}
                                 />
                             )}
+                            shouldUnregister={true}
                             name='username'
                             rules={{
                                 required: 'Please enter username',
@@ -64,6 +65,7 @@ const Login = () => {
                                     }
                                 />
                             )}
+                            shouldUnregister={true}
                             name='password'
                             rules={{
                                 required: 'Please enter password',

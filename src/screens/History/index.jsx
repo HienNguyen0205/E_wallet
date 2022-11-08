@@ -16,6 +16,12 @@ const data = [
         dateTime: '12:01 am   21 Jun 2021',
         amount: -100,
     },
+    {
+        imgSrc: require('../../assets/Images/spotify_logo.png'),
+        label: 'Spotify Subcription',
+        dateTime: '12:01 am   21 Jun 2021',
+        amount: -100,
+    },
 ]
 
 const History = () => {
