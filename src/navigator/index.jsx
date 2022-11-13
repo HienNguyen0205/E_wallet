@@ -5,6 +5,7 @@ import { BottomNav } from './BottomNav'
 import Login from '../screens/Login'
 import Register from '../screens/Register'
 import Deposit from '../screens/Deposit'
+import AddPayment from '../screens/AddPayment'
 
 const Stack = createNativeStackNavigator()
   
@@ -19,6 +20,7 @@ function AppNavigator() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
           <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
           <Stack.Screen name="Deposit" component={Deposit} options={{ headerShown: false }}/>
+          <Stack.Screen name="AddPayment" component={AddPayment} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     )

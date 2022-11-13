@@ -7,10 +7,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Feather from 'react-native-vector-icons/Feather'
 
 const carouselSrc = [
-    require('../../assets/Images/ads.png'),
-    require('../../assets/Images/ads1.png'),
-    require('../../assets/Images/ads2.png'),
-    require('../../assets/Images/ads3.png'),
+    require('../../assets/Images/Banner/ads.png'),
+    require('../../assets/Images/Banner/ads1.png'),
+    require('../../assets/Images/Banner/ads2.png'),
+    require('../../assets/Images/Banner/ads3.png'),
 ]
 
 const Home = () => {
@@ -23,14 +23,14 @@ const Home = () => {
                     <Text fontSize={24} fontWeight='bold' color='#ffffff'>Wjbu rách</Text>
                 </Stack>
                 <Avatar size='lg'
-                    source={require('../../assets/Images/User.png')}
+                    source={require('../../assets/Images/User_Image/User.png')}
                     bg='#2e303c'
                 />
             </Stack>
             <Box height={300}>
                 <ZStack>
                     <Box height={300} alignItems='center'>
-                        <Image source={require('../../assets/Images/card.png')} alt='Card' resizeMode="contain" flex={1}/>
+                        <Image source={require('../../assets/Images/UI_Bg/card.png')} alt='Card' resizeMode="contain" flex={1}/>
                     </Box>
                     <Text mt='20' ml='8' color='#ffffff' fontSize={24} fontWeight='bold'>Wjbu rách</Text>
                     <Box mt='40' ml='8'>

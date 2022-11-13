@@ -91,7 +91,8 @@ const Statistic = () => {
                     renderDropdownIcon={isOpened => {
                         return <Icon as={FontAwesome} name={isOpened ? 'chevron-up' : 'chevron-down'} color='white' mr={2}/>
                     }}
-                    dropdownIconPosition='right'/>
+                    dropdownIconPosition='right'
+                />
             </Stack>
             <Stack space={3}>
                 <LineChart

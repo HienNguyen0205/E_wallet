@@ -10,7 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 const Register = () => {
 
     const [showPwd, setShowPwd] = useState(false)
-    const { control , handleSubmit, formState: {errors}, watch } = useForm()
+    const { control , handleSubmit, formState: {errors}, watch, register, setValue, reset } = useForm()
     const {navigate} = useNavigation()
     const dispatch = useDispatch()
     const password = useRef({})
@@ -22,6 +22,9 @@ const Register = () => {
 
     const changeScreen = target => {
         dispatch(toggleLoading())
+        reset({
+            email: '', tel: '', password: '', confirmPwd: '',
+        })
         navigate(target)
         setTimeout(() => {
             dispatch(toggleLoading())
@@ -33,43 +36,40 @@ const Register = () => {
             <Box p="2" py="8" w="80%">
                 <VStack space={3} mt="5">
                     <Logo/>
-                    <FormControl isRequired isInvalid={'username' in errors}>
+                    <FormControl isRequired isInvalid={'email' in errors}>
                         <Controller control={control}
-                            render = {({field: {onChange}}) => (
+                            render = {({field}) => (
                                 <Input type='text'
                                     variant={'fill'}
-                                    placeholder="Enter username"
-                                    onChangeText={text => onChange(text)}
+                                    placeholder="Enter email"
+                                    {...field}
+                                    onChangeText={text => field.onChange(text)}
                                 />
                             )}
-                            shouldUnregister={true}
-                            name='username'
+                            name='email'
                             rules={{
-                                required: 'Please enter username',
-                                minLength: {
-                                    value: 8,
-                                    message: 'Username is as least 8 characters'
-                                },
-                                maxLength: {
-                                    value: 30,
-                                    message: 'Username is no more than 30 characters'
-                                },
+                                required: 'Please enter email',
+                                pattern: {
+                                    value: '/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g',
+                                    message: 'Wrong email address format'
+                                }
                             }}
                         />
                         <FormControl.ErrorMessage leftIcon={<Icon as={Ionicons} name="warning" size={3} color="#ef4444"/>}>
-                            {errors.username?.message}
+                            {errors.email?.message}
                         </FormControl.ErrorMessage>
                     </FormControl>
                     <FormControl isRequired isInvalid={'tel' in errors}>
                         <Controller control={control}
-                            render = {({field: {onChange}}) => (
+                            render = {({field}) => (
                                 <Input type='text'
                                     variant={'fill'}
                                     placeholder="Phone number"
-                                    onChangeText={text => onChange(text)}
+                                    keyboardType='numeric'
+                                    {...field}
+                                    onChangeText={text => field.onChange(text)}
                                 />
                             )}
-                            shouldUnregister={true}
                             name='tel'
                             rules={{
                                 required: 'Please enter phone number',
@@ -85,12 +85,13 @@ const Register = () => {
                     </FormControl>
                     <FormControl isRequired isInvalid={'password' in errors}>
                         <Controller control={control}
-                            render={({field: {onChange}}) => (
+                            render={({field}) => (
                                 <Input
                                     type={showPwd ? "text" : "password"}
                                     variant={'fill'}
                                     placeholder="Password"
-                                    onChangeText={text => onChange(text)}
+                                    {...field}
+                                    onChangeText={text => field.onChange(text)}
                                     InputRightElement={
                                         <Pressable onPress={() => setShowPwd(!showPwd)}>
                                             <Icon as={Ionicons} name={showPwd ? "eye" : "eye-off"} size={5} mr="2" color='#ffffff'/>
@@ -98,7 +99,6 @@ const Register = () => {
                                     }
                                 />
                             )}
-                            shouldUnregister={true}
                             name='password'
                             rules={{
                                 required: 'Please enter password',
@@ -114,15 +114,15 @@ const Register = () => {
                     </FormControl>
                     <FormControl isRequired isInvalid={'confirmPwd' in errors}>
                         <Controller control={control}
-                            render={({field: {onChange}}) => (
+                            render={({field}) => (
                                 <Input
                                     type="password"
                                     variant={'fill'}
                                     placeholder="Confirm password"
-                                    onChangeText={text => onChange(text)}
+                                    {...field}
+                                    onChangeText={text => field.onChange(text)}
                                 />
                             )}
-                            shouldUnregister={true}
                             name='confirmPwd'
                             rules={{
                                 required: 'Please enter confirm password',
