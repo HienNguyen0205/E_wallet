@@ -6,6 +6,8 @@ import Login from '../screens/Login'
 import Register from '../screens/Register'
 import Deposit from '../screens/Deposit'
 import AddPayment from '../screens/AddPayment'
+import Withdraw from '../screens/Withdraw'
+import Transfer from '../screens/Transfer'
 
 const Stack = createNativeStackNavigator()
   
@@ -21,6 +23,8 @@ function AppNavigator() {
           <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
           <Stack.Screen name="Deposit" component={Deposit} options={{ headerShown: false }}/>
           <Stack.Screen name="AddPayment" component={AddPayment} options={{ headerShown: false }}/>
+          <Stack.Screen name="Withdraw" component={Withdraw} options={{ headerShown: false }}/>
+          <Stack.Screen name="Transfer" component={Transfer} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     )

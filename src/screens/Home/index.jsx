@@ -43,16 +43,16 @@ const Home = () => {
                 <BtnAndText iconType={MaterialCommunityIcons} name='tray-arrow-down'
                     color='#20a5f2' bg='#17344f' text='Deposit' screen='Deposit'/>
                 <BtnAndText iconType={Feather} name='dollar-sign'
-                    color='#ee3356' bg='#411c2d' text='Withdraw' screen='Deposit'/>
+                    color='#ee3356' bg='#411c2d' text='Withdraw' screen='Withdraw'/>
                 <BtnAndText iconType={Feather} name='send'
-                    color='#1aa270' bg='#163436' text='Transfer' screen='Deposit'/>
+                    color='#1aa270' bg='#163436' text='Transfer' screen='Transfer'/>
                 <BtnAndText iconType={MaterialCommunityIcons} name='cellphone-check'
                     color='#ff8d3a' bg='#422d28' text='Top-up card' screen='Deposit'/>
             </Stack>
             <Stack alignItems={'center'} my='2'>
-                <Divider thickness={1} bg='#f66d97'/>
+                <Divider thickness={2} bg='#f66d97'/>
                 <Text color='#f66d97' fontSize={16} fontWeight='bold'>E-wallet News</Text>
-                <Divider thickness={1} bg='#f66d97'/>
+                <Divider thickness={2} bg='#f66d97'/>
             </Stack>
             <Box flex={1}>
                 <Carousel
