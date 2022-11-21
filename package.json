@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
@@ -18,6 +19,7 @@
     "react": "^18.2.0",
     "react-hook-form": "^7.38.0",
     "react-native": "0.70.3",
+    "react-native-app-intro-slider": "^4.0.4",
     "react-native-chart-kit": "^6.12.0",
     "react-native-curved-bottom-bar": "^2.1.4",
     "react-native-gesture-handler": "^2.8.0",
@@ -28,7 +30,8 @@
     "react-native-select-dropdown": "^3.0.1",
     "react-native-svg": "^12.1.1",
     "react-native-vector-icons": "^9.2.0",
-    "react-redux": "^8.0.4"
+    "react-redux": "^8.0.4",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

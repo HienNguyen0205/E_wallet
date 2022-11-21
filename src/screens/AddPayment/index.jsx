@@ -79,7 +79,7 @@ const AddPayment = () => {
                     <Text color='white' fontSize={16} mb={2}>Select payment method</Text>
                     <SelectDropdown
                         data={paymentOptions}
-                        onSelect={item => setPayment(item)}
+                        onSelect={item => setPayment(item.title)}
                         buttonStyle={styles.dropdownBtn}
                         renderCustomizedButtonChild={selectedItem => {
                             return (

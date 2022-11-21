@@ -1,38 +1,25 @@
-import React, { useRef } from 'react'
-import { Stack , Text, IconButton, Icon, Image, Pressable, Input, FormControl, Button } from 'native-base'
+import React, { useState ,useRef } from 'react'
+import { Stack , Text, IconButton, Icon, Image, Input, FormControl, Button, Avatar } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { paymentSelected } from "../../redux/reducer/payMethod"
 import { toggleLoading } from '../../redux/reducer/loading'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import PaymentSelect from '../../components/PaymentSelect'
-
-const data = [
-    {
-        src: require('../../assets/Images/Logo/Paypal_logo.png'),
-        label: 'Paypal',
-        fee: 'Free payment',
-    },
-    {
-        src: require('../../assets/Images/Logo/Payeer_logo.png'),
-        label: 'Payeer',
-        fee: 'Free payment',
-    },
-]
 
 const Transfer = () => {
 
+    const [isFound, setIsFound] = useState(false)
     const dispatch = useDispatch()
     const { navigate } = useNavigation()
     const { control , handleSubmit, formState: {errors}, reset, register, setValue, watch } = useForm()
     const amount = useRef({})
+    const tel = useRef({})
     amount.current = watch('amount', '')
+    tel.current = watch('tel', '')
 
     const returnHome = () => {
         dispatch(toggleLoading())
-        dispatch(paymentSelected(0))
         navigate('Home')
         setTimeout(() => {
             dispatch(toggleLoading())
@@ -56,7 +43,7 @@ const Transfer = () => {
                 </Stack>
             </Stack>
             <Stack borderRadius='xl' bg='#2e303c' py={2} px={3}>
-                <Text color='white' fontSize={14} mb={2}>Enter receiver's phone number</Text>
+                <Text color='white' fontSize={14} mb={2}>Receiver's phone number</Text>
                 <FormControl isRequired isInvalid={'tel' in errors} mb={2}>
                     <Controller control={control}
                         render = {({field}) => (
@@ -84,9 +71,16 @@ const Transfer = () => {
             <Stack space={6} borderRadius='xl' bg='#2e303c' py={2} px={3}>
                 <Stack>
                     <Text color='white' fontSize={14} mb={2}>Receiver's info</Text>
+                    <Stack direction='row' py={2} px={3} borderRadius='xl' borderWidth={1} borderColor='#eecbff'>
+                        <Avatar source={require('../../assets/Images/User_Image/User.png')} mr={3}/>
+                        <Stack justifyContent='center' space={1}>
+                            <Text color='#d4ffea' fontSize={16}>Antj-wjbu</Text>
+                            <Text color='#d4ffea' fontSize={12}>Id: 1234566</Text>
+                        </Stack>
+                    </Stack>
                 </Stack>
                 <Stack>
-                    <Text color='white' fontSize={14} mb={2}>Enter amount</Text>
+                    <Text color='white' fontSize={14} mb={2}>Amount</Text>
                     <FormControl isRequired isInvalid={'amount' in errors} mb={2}>
                         <Controller control={control}
                             render = {({field}) => (
@@ -109,7 +103,7 @@ const Transfer = () => {
                     </FormControl>
                 </Stack>
             </Stack>
-            <Button variant={amount.current ? 'solid' : 'outline'} fontSize={18}>Transfer</Button>
+            <Button variant={amount.current && tel.current ? 'solid' : 'outline'} fontSize={18}>Transfer</Button>
         </Stack>
     )
 }

@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { toggleLoading } from '../../redux/reducer/loading'
+import { signIn } from '../../redux/reducer/isSignIn'
 import Logo from '../../components/Logo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -15,6 +16,7 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const onSubmit = data => {
+        dispatch(signIn())
         changeScreen('BottomNav')
     }
 

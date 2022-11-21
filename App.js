@@ -1,11 +1,15 @@
 import React from 'react'
-import { NativeBaseProvider ,extendTheme } from 'native-base'
+import { NativeBaseProvider , extendTheme } from 'native-base'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
 import AppNavigator from './src/navigator'
 import Loading from './src/components/Loading'
 import store from './src/redux/store'
 
 const App = () => {
+
+  let persistor = persistStore(store)
 
   const theme = extendTheme({
     components: {
@@ -48,8 +52,10 @@ const App = () => {
   return (
     <NativeBaseProvider theme={theme}>
       <Provider store={store}>
-        <AppNavigator />
-        <Loading/>
+        <PersistGate loading={null} persistor={persistor}>
+          <AppNavigator />
+          <Loading/>
+        </PersistGate>
       </Provider>
     </NativeBaseProvider>
   )

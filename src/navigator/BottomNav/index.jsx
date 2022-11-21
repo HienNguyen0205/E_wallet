@@ -36,7 +36,7 @@ export const BottomNav = () => {
         icon = 'ios-bar-chart-outline'
         break
       case 'Setting':
-        icon = 'ios-settings-outline'
+        icon = 'person-outline'
         break
     }
 

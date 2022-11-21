@@ -1,33 +1,68 @@
 import React from 'react'
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { BottomNav } from './BottomNav'
+import { useSelector } from 'react-redux'
 import Login from '../screens/Login'
 import Register from '../screens/Register'
 import Deposit from '../screens/Deposit'
 import AddPayment from '../screens/AddPayment'
 import Withdraw from '../screens/Withdraw'
 import Transfer from '../screens/Transfer'
+import TopUpCard from '../screens/TopUpCard'
+import Intro from '../screens/Intro'
+import UserInfo from '../screens/UserInfo'
 
 const Stack = createNativeStackNavigator()
-  
+
+const config = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+}
+
+const opt = {
+  headerShown: false,
+  transitionSpec: {
+    open: config,
+    close: config,
+  }
+}
+
 function AppNavigator() {
 
-    const navigationRef = useNavigationContainerRef()
+  const isFirstLauch = useSelector(state => state.firstLauch.value)
+  const isSignIn = useSelector(state => state.isSignIn.value)
 
-    return (
-      <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="BottomNav" component={BottomNav} options={{ headerShown: false }}/>
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
-          <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
-          <Stack.Screen name="Deposit" component={Deposit} options={{ headerShown: false }}/>
-          <Stack.Screen name="AddPayment" component={AddPayment} options={{ headerShown: false }}/>
-          <Stack.Screen name="Withdraw" component={Withdraw} options={{ headerShown: false }}/>
-          <Stack.Screen name="Transfer" component={Transfer} options={{ headerShown: false }}/>
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Intro">
+        {isSignIn ? (
+          <>
+            <Stack.Screen name="BottomNav" component={BottomNav} options={opt} />
+            <Stack.Screen name="Deposit" component={Deposit} options={opt} />
+            <Stack.Screen name="AddPayment" component={AddPayment} options={opt} />
+            <Stack.Screen name="Withdraw" component={Withdraw} options={opt} />
+            <Stack.Screen name="Transfer" component={Transfer} options={opt} />
+            <Stack.Screen name="TopUpCard" component={TopUpCard} options={opt} />
+            <Stack.Screen name="UserInfo" component={UserInfo} options={opt} />
+          </>
+        ) : (
+          <>
+            {isFirstLauch && <Stack.Screen name="Intro" component={Intro} options={opt} />}
+            <Stack.Screen name="Login" component={Login} options={opt} />
+            <Stack.Screen name="Register" component={Register} options={opt} />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 
 export default AppNavigator

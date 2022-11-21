@@ -47,7 +47,7 @@ const Home = () => {
                 <BtnAndText iconType={Feather} name='send'
                     color='#1aa270' bg='#163436' text='Transfer' screen='Transfer'/>
                 <BtnAndText iconType={MaterialCommunityIcons} name='cellphone-check'
-                    color='#ff8d3a' bg='#422d28' text='Top-up card' screen='Deposit'/>
+                    color='#ff8d3a' bg='#422d28' text='Top-up card' screen='TopUpCard'/>
             </Stack>
             <Stack alignItems={'center'} my='2'>
                 <Divider thickness={2} bg='#f66d97'/>

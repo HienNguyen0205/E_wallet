@@ -56,7 +56,7 @@ const Deposit = () => {
                 </Stack>
             </Stack>
             <Stack borderRadius='xl' bg='#2e303c' py={2} px={3}>
-                <Text color='white' fontSize={14} mb={2}>Enter amount</Text>
+                <Text color='white' fontSize={14} mb={2}>Amount</Text>
                 <FormControl isRequired isInvalid={'amount' in errors} mb={2}>
                     <Controller control={control}
                         render = {({field}) => (
