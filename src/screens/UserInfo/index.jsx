@@ -31,7 +31,7 @@ const UserInfo = () => {
                     <Avatar.Badge bg='amber.500'/>
                 </Avatar>
             </Stack>
-            <Stack borderRadius='2xl' p={4} bg='#2e303c' space={4}>
+            <Stack borderRadius='2xl' p={4} bg='#2e303c' space={7}>
                 <Stack direction='row' justifyContent='space-between'>
                     <Text color='white' fontSize={16}>Name</Text>
                     <Text color='white' fontSize={16}>Wibu</Text>

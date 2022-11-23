@@ -1,7 +1,9 @@
 import React from 'react'
 import { Stack, Text, Image } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
 import AppIntroSlider from 'react-native-app-intro-slider'
+import { turnOffIntro } from '../../redux/reducer/firstLauch'
 
 const slides = [
     {
@@ -27,6 +29,7 @@ const slides = [
 const Intro = () => {
 
     const { navigate } = useNavigation()
+    const dispatch = useDispatch()
 
     const _renderItem = ({ item }) => {
         return (
@@ -42,6 +45,7 @@ const Intro = () => {
     }
 
     const _onDone = () => {
+        dispatch(turnOffIntro())
         navigate('Login')
     }
 

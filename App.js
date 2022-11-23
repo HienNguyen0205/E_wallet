@@ -1,4 +1,5 @@
 import React from 'react'
+import 'react-native-gesture-handler'
 import { NativeBaseProvider , extendTheme } from 'native-base'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'

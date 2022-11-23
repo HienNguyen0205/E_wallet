@@ -12,6 +12,9 @@ import Transfer from '../screens/Transfer'
 import TopUpCard from '../screens/TopUpCard'
 import Intro from '../screens/Intro'
 import UserInfo from '../screens/UserInfo'
+import ChangePass from '../screens/ChangePass'
+import OTP from '../screens/OTP'
+import SetTransPass from '../screens/SetTransPass'
 
 const Stack = createNativeStackNavigator()
 
@@ -32,7 +35,8 @@ const opt = {
   transitionSpec: {
     open: config,
     close: config,
-  }
+  },
+  presentation: 'modal',
 }
 
 function AppNavigator() {
@@ -52,12 +56,15 @@ function AppNavigator() {
             <Stack.Screen name="Transfer" component={Transfer} options={opt} />
             <Stack.Screen name="TopUpCard" component={TopUpCard} options={opt} />
             <Stack.Screen name="UserInfo" component={UserInfo} options={opt} />
+            <Stack.Screen name="ChangePass" component={ChangePass} options={opt} />
           </>
         ) : (
           <>
             {isFirstLauch && <Stack.Screen name="Intro" component={Intro} options={opt} />}
             <Stack.Screen name="Login" component={Login} options={opt} />
             <Stack.Screen name="Register" component={Register} options={opt} />
+            <Stack.Screen name="OTP" component={OTP} options={opt} />
+            <Stack.Screen name="SetTransPass" component={SetTransPass} options={opt} />
           </>
         )}
       </Stack.Navigator>

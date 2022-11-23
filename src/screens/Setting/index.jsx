@@ -38,14 +38,24 @@ const Setting = () => {
                     <Icon name='keyboard-arrow-right' size={32} color='white'/>
                 </Stack>
             </Pressable>
-            <Stack borderRadius='xl' bg='#2e303c' p={4} space={3}>
+            <Stack borderRadius='xl' bg='#2e303c' p={4} space={5}>
+                <Pressable onPress={() => navigate('ChangePass')}>
+                    <Stack direction='row' alignItems='center'>
+                        <Text color='white' fontSize={18} flex={1}>Change password</Text>
+                        <Icon name='keyboard-arrow-right' size={32} color='white'/>
+                    </Stack>
+                </Pressable>
                 <Stack direction='row' alignItems='center'>
-                    <Text color='white' fontSize={18} flex={1}>Change password</Text>
+                    <Text color='white' fontSize={18} flex={1}>Change transaction password</Text>
                     <Icon name='keyboard-arrow-right' size={32} color='white'/>
                 </Stack>
                 <Stack direction='row' alignItems='center'>
                     <Text color='white' fontSize={18} flex={1}>Dark mode</Text>
                     <Switch defaultIsChecked colorScheme="secondary" />
+                </Stack>
+                <Stack direction='row' alignItems='center'>
+                    <Text color='white' fontSize={18} flex={1}>About us</Text>
+                    <Icon name='keyboard-arrow-right' size={32} color='white'/>
                 </Stack>
             </Stack>
             <Button mt={3} bg='#ee3356' px={2} onPress={() => backLogin()}>Log out</Button>

@@ -31,12 +31,12 @@ const Deposit = () => {
     amount.current = watch('amount', '')
 
     const returnHome = () => {
-        dispatch(toggleLoading())
+        // dispatch(toggleLoading())
         dispatch(paymentSelected(0))
         navigate('Home')
-        setTimeout(() => {
-            dispatch(toggleLoading())
-        }, 700)
+        // setTimeout(() => {
+        //     dispatch(toggleLoading())
+        // }, 700)
     }
 
     return (

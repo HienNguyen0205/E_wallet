@@ -17,14 +17,12 @@ const Register = () => {
     password.current = watch('password', '')
 
     const onSubmit = data => {
-        changeScreen('BottomNav')
+        changeScreen('OTP')
     }
 
     const changeScreen = target => {
         dispatch(toggleLoading())
-        reset({
-            email: '', tel: '', password: '', confirmPwd: '',
-        })
+        reset()
         navigate(target)
         setTimeout(() => {
             dispatch(toggleLoading())
