@@ -7,7 +7,7 @@ const persistConfig = {
     key: 'root',
     version: 0,
     storage: AsyncStorage,
-    whitelist: ['firstLauch', 'isSignIn'],
+    whitelist: ['firstLauch', 'isSignIn', 'userInfo'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

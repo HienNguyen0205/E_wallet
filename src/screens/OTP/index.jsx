@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
-import { Center, Text, Link, Stack } from 'native-base'
+import { Center, Text, Link, Stack, useToast } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
+import { baseURL } from '../../api'
+import { useSelector, useDispatch } from 'react-redux'
+import { setForgetPassState } from '../../redux/reducer/forgetPassState'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import Logo from '../../components/Logo'
+import axios from 'axios'
 
 const OTP = () => {
 
     const [code, setCode] = useState('')
     const { navigate } = useNavigation()
+    const { email } = useSelector(state => state.userInfo.value)
+    const toast = useToast()
+    const forgetPassState = useSelector(state => state.forgetPassState.value)
+    const dispatch = useDispatch()
 
     const styles = StyleSheet.create({
         underlineStyleBase: {
@@ -24,7 +32,31 @@ const OTP = () => {
     })
 
     const verifyOTP = code => {
-        navigate('SetTransPass')
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/verifyotp.php`,
+            data: {
+                otp_code: code,
+                email: email,
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0){
+                if(forgetPassState === 'otp'){
+                    dispatch(setForgetPassState('resetPass'))
+                    navigate('ForgetPass')
+                }else{
+                    navigate('SetTransPass')
+                }
+            }else{
+                setCode('')
+                toast.show({
+                    title: response.data.data,
+                    duration: 2500,
+                })
+            }
+        })
+        
     }
 
     return (
@@ -32,6 +64,7 @@ const OTP = () => {
             <Logo />
             <Text color='white' fontSize={32} fontWeight='bold' mt={6}>Enter OTP</Text>
             <OTPInputView
+                code={code}
                 style={{ width: '80%', height: 200 }}
                 pinCount={6}
                 onCodeChanged={code => setCode(code)}
@@ -52,7 +85,10 @@ const OTP = () => {
                     color: "indigo.500",
                     fontWeight: "medium",
                     fontSize: "md"
-                }} onPress={() => navigate('Login')}>Back to Login</Link>
+                }} onPress={() => {
+                    dispatch(setForgetPassState('email'))
+                    navigate('Login')
+                }}>Back to Login</Link>
             </Stack>
         </Center>
     )

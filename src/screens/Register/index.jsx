@@ -4,6 +4,9 @@ import { useForm, Controller } from 'react-hook-form'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { toggleLoading } from '../../redux/reducer/loading'
+import { setUserInfo } from '../../redux/reducer/userInfo'
+import { baseURL } from '../../api'
+import axios from 'axios'
 import Logo from '../../components/Logo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -11,22 +14,38 @@ const Register = () => {
 
     const [showPwd, setShowPwd] = useState(false)
     const { control , handleSubmit, formState: {errors}, watch, register, setValue, reset } = useForm()
-    const {navigate} = useNavigation()
+    const { navigate } = useNavigation()
     const dispatch = useDispatch()
     const password = useRef({})
     password.current = watch('password', '')
 
     const onSubmit = data => {
-        changeScreen('OTP')
+
+        const { tel , email, password } = data
+
+        dispatch(toggleLoading())
+        
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/register.php`,
+            data: {
+                phone: tel,
+                email: email,
+                password: password,
+            },
+        })
+        .then(response => {
+            if(response.data.code === 0){
+                dispatch(setUserInfo({email: email, tel: tel}))
+                dispatch(toggleLoading())
+                changeScreen('OTP')
+            }
+        })
     }
 
     const changeScreen = target => {
-        dispatch(toggleLoading())
         reset()
         navigate(target)
-        setTimeout(() => {
-            dispatch(toggleLoading())
-        }, 700)
     }
 
     return (

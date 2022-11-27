@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
-import { Box, Text, VStack, FormControl, Input, Link, Button, HStack, Center, Pressable, Icon } from "native-base"
+import { Box, Text, VStack, FormControl, Input, Link, Button, HStack, Center, Pressable, Icon, useToast } from "native-base"
 import { useForm, Controller } from 'react-hook-form'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { toggleLoading } from '../../redux/reducer/loading'
 import { signIn } from '../../redux/reducer/isSignIn'
+import { setUserInfo } from '../../redux/reducer/userInfo'
+import { baseURL } from '../../api'
+import axios from 'axios'
 import Logo from '../../components/Logo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -14,18 +17,45 @@ const Login = () => {
     const { control , handleSubmit, formState: {errors}, reset, register, setValue} = useForm()
     const {navigate} = useNavigation()
     const dispatch = useDispatch()
+    const toast = useToast()
+
+    const userSignIn = () => {
+        return new Promise(resolve => {
+            dispatch(signIn())
+            resolve()
+        })
+    }
 
     const onSubmit = data => {
-        dispatch(signIn())
-        changeScreen('BottomNav')
+
+        const { tel, password } = data
+
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/login.php`,
+            data: {
+                phone: tel,
+                password: password
+            }
+        })
+        .then(async response => {
+            if(response.data.code === 0){
+                await userSignIn()
+                changeScreen('BottomNav')
+                dispatch(setUserInfo({
+                    tel: tel,
+                }))
+            }
+            toast.show({
+                title: response.data.data,
+                duration: 2500
+            })
+        })
     }
 
     const changeScreen = target => {
         dispatch(toggleLoading())
-        reset({
-            tel: '',
-            password: '',
-        })
+        reset()
         navigate(target)
         setTimeout(() => {
             dispatch(toggleLoading())
@@ -93,7 +123,7 @@ const Login = () => {
                                 fontSize: "xs",
                                 fontWeight: "500",
                                 color: "indigo.500"
-                            }} alignSelf="flex-end" mt="1" isUnderlined={false}>
+                            }} alignSelf="flex-end" mt="1" isUnderlined={false} onPress={() => navigate('ForgetPass')}>
                             Forget Password?
                         </Link>
                     </FormControl>

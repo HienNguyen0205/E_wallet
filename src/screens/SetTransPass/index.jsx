@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Center, Modal, Button, Text, Link, Stack } from 'native-base'
+import { Center, Button, Text, Link, Stack, useToast } from 'native-base'
 import { Animated, StyleSheet } from 'react-native'
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
-import Logo from '../../components/Logo'
+import { useSelector ,useDispatch } from 'react-redux'
 import { signIn } from '../../redux/reducer/isSignIn'
+import { baseURL } from '../../api'
+import Logo from '../../components/Logo'
+import axios from 'axios'
 
 const { Value, Text: AnimatedText } = Animated
 
@@ -28,6 +30,7 @@ const animateCell = ({ hasValue, index, isFocused }) => {
 
 const SetTransPass = () => {
 
+    const { email } = useSelector(state => state.userInfo.value)
     const [value, setValue] = useState('')
     const { navigate } = useNavigation()
     const dispatch = useDispatch()
@@ -36,16 +39,36 @@ const SetTransPass = () => {
         value,
         setValue,
     })
+    const toast = useToast()
 
     const userSignIn = () => {
-        return Promise(resolve => {
+        return new Promise(resolve => {
             dispatch(signIn())
         })
     }
 
-    const changeScreen = async () => {
-        await userSignIn()
-        navigate('Home')
+    const onSubmit = () => {
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/setpasswordtrans.php`,
+            data: {
+                email: email,
+                passtrans: value
+            }
+        })
+        .then(async response => {
+            if(response.data.code === 0) {
+                await userSignIn()
+                navigate('BottomNav')
+            }else{
+                setValue('')
+            }
+            toast.show({
+                title: response.data.data,
+                duration: 2500,
+            })
+        })
+        
     }
 
     const styles = StyleSheet.create({
@@ -163,7 +186,7 @@ const SetTransPass = () => {
                     textContentType="password"
                     renderCell={renderCell}
                 />
-                <Button mt={6} onPress={() => changeScreen()}>Create</Button>
+                <Button mt={6} onPress={() => onSubmit()}>Create Password</Button>
                 <Link _text={{
                     color: "indigo.500",
                     fontWeight: "medium",

@@ -15,6 +15,7 @@ import UserInfo from '../screens/UserInfo'
 import ChangePass from '../screens/ChangePass'
 import OTP from '../screens/OTP'
 import SetTransPass from '../screens/SetTransPass'
+import ForgetPass from '../screens/ForgetPass'
 
 const Stack = createNativeStackNavigator()
 
@@ -65,6 +66,7 @@ function AppNavigator() {
             <Stack.Screen name="Register" component={Register} options={opt} />
             <Stack.Screen name="OTP" component={OTP} options={opt} />
             <Stack.Screen name="SetTransPass" component={SetTransPass} options={opt} />
+            <Stack.Screen name="ForgetPass" component={ForgetPass} options={opt} />
           </>
         )}
       </Stack.Navigator>
