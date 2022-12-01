@@ -5,6 +5,7 @@ import isSignIn from "./isSignIn"
 import firstLauch from "./firstLauch"
 import userInfo from "./userInfo"
 import forgetPassState from "./forgetPassState"
+import transPassModal from "./transPassModal"
 
 export default rootReducer = combineReducers({
     loading: loading,
@@ -13,4 +14,5 @@ export default rootReducer = combineReducers({
     firstLauch: firstLauch,
     userInfo: userInfo,
     forgetPassState: forgetPassState,
+    transPassModal: transPassModal,
 })

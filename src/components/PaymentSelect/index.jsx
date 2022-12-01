@@ -1,19 +1,26 @@
 import React from "react"
 import { Stack, Text, Pressable, Image } from 'native-base'
 import { useSelector, useDispatch } from "react-redux"
-import { paymentSelected } from "../../redux/reducer/payMethod"
+import { setSelectedId } from "../../redux/reducer/payMethod"
 
-const PaymentSelect = ({ index, src, label, fee}) => {
+const PaymentSelect = ({index, label, fee}) => {
 
     const dispatch = useDispatch()
-    const isSelected = useSelector(state => state.payMethod.value)
+    const id = useSelector(state => state.payMethod.selectedId)
+
+    const setLogo = () => {
+        if(label === 'Paypal'){
+            return require('../../assets/Images/Logo/Paypal_logo.png')
+        }
+        return require('../../assets/Images/Logo/Payeer_logo.png')
+    }
 
     return (
-        <Pressable onPress={() => dispatch(paymentSelected(index))}>
+        <Pressable onPress={() => dispatch(setSelectedId(index))}>
             <Stack direction='row' py={2} px={3} my={2} borderRadius='xl' alignItems='center'
-                borderWidth={1} borderColor={isSelected === index ? '#1aa270' : 'white'}>
+                borderWidth={1} borderColor={id === index ? '#1aa270' : 'white'}>
                 <Image mr={3} borderRadius={100}
-                    source={src}
+                    source={setLogo()}
                     alt='' size={50}
                 />
                 <Stack flex={1}>

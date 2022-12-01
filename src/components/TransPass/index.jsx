@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Center, Button, Text, Link, Stack, useToast } from 'native-base'
+import { Stack, Modal, useToast, Text } from 'native-base'
 import { Animated, StyleSheet } from 'react-native'
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field'
-import { useNavigation } from '@react-navigation/native'
-import { useSelector ,useDispatch } from 'react-redux'
-import { signIn } from '../../redux/reducer/isSignIn'
+import { useSelector, useDispatch } from 'react-redux'
 import { baseURL } from '../../api'
-import Logo from '../../components/Logo'
+import { setCode, setModalState } from '../../redux/reducer/transPassModal'
 import axios from 'axios'
 
 const { Value, Text: AnimatedText } = Animated
@@ -28,11 +26,11 @@ const animateCell = ({ hasValue, index, isFocused }) => {
     ]).start()
 }
 
-const SetTransPass = () => {
+const TransPass = () => {
 
+    const isOpen = useSelector(state => state.transPassModal.isOpen)
     const { email } = useSelector(state => state.userInfo.value)
     const [value, setValue] = useState('')
-    const { navigate } = useNavigation()
     const dispatch = useDispatch()
     const ref = useBlurOnFulfill({ value, cellCount: 6 })
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -41,47 +39,39 @@ const SetTransPass = () => {
     })
     const toast = useToast()
 
-    const userSignIn = () => {
-        return new Promise(resolve => {
-            dispatch(signIn())
-        })
-    }
-
     const onSubmit = () => {
         axios({
             method: 'post',
-            url: `http://${baseURL}:80/E_Wallet_API/api/user/setpasswordtrans.php`,
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/checkpasstrans.php`,
             data: {
                 email: email,
                 passtrans: value
             }
         })
-        .then(async response => {
-            if(response.data.code === 0) {
-                await userSignIn()
-                navigate('BottomNav')
-            }else{
-                setValue('')
+        .then(response => {
+            if(response.data.code === 0){
+                dispatch(setCode(value))
+                dispatch(setModalState(false))
             }
+            setValue('')
             toast.show({
                 title: response.data.data,
-                duration: 2500,
+                duration: 2500
             })
         })
-        
     }
 
     const styles = StyleSheet.create({
         codeFieldRoot: {
-            height: 48,
-            marginTop: 30,
+            height: 60,
             justifyContent: 'center',
+            marginTop: 18,
         },
         cell: {
             marginHorizontal: 8,
-            height: 48,
-            width: 48,
-            lineHeight: 48 - 5,
+            height: 36,
+            width: 36,
+            lineHeight: 36 - 5,
             fontSize: 24,
             textAlign: 'center',
             borderRadius: 8,
@@ -131,31 +121,42 @@ const SetTransPass = () => {
         )
     }
 
+    const handleClode = () => {
+        dispatch(setCode(''))
+        dispatch(setModalState(false))
+    }
+
+    useEffect(() => {
+        if(value.length === 6){
+            onSubmit()
+        }
+    }, [value])
+
     return (
-        <Center w="100%" flex={1} backgroundColor='#272a3f' justifyContent='center'>
-            <Stack justifyContent='space-around' alignItems='center' space={4}>
-                <Logo />
-                <Text color='white' fontSize={32} fontWeight='bold' mt={6}>Create transaction pass</Text>
-                <CodeField
-                    ref={ref}
-                    {...props}
-                    value={value}
-                    onChangeText={setValue}
-                    cellCount={6}
-                    rootStyle={styles.codeFieldRoot}
-                    keyboardType="number-pad"
-                    textContentType="password"
-                    renderCell={renderCell}
-                />
-                <Button mt={6} onPress={() => onSubmit()}>Create Password</Button>
-                <Link _text={{
-                    color: "indigo.500",
-                    fontWeight: "medium",
-                    fontSize: "md"
-                }} onPress={() => navigate('Login')}>Back to Login</Link>
-            </Stack>
-        </Center>
+        <Stack alignItems='center'>
+            <Modal isOpen={isOpen} onClose={() => handleClode()} closeOnOverlayClick={false} size='lg'>
+                <Modal.Content maxWidth="400px" bg='#d6ccf9'>
+                    <Modal.CloseButton style={{ position: 'absolute', right: 8, top: 6 }}/>
+                    <Modal.Header bg="#a8a5ec" style={{ position: 'relative', height: 40 }}>
+                        <Text fontSize={18} style={{ position: 'absolute', left: 40, top: 6 }}>Enter transaction password</Text>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <CodeField
+                            ref={ref}
+                            {...props}
+                            value={value}
+                            onChangeText={setValue}
+                            cellCount={6}
+                            rootStyle={styles.codeFieldRoot}
+                            keyboardType="number-pad"
+                            textContentType="password"
+                            renderCell={renderCell}
+                        />
+                    </Modal.Body>
+                </Modal.Content>
+            </Modal>
+        </Stack>
     )
 }
 
-export default SetTransPass
+export default TransPass

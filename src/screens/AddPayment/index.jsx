@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { Stack, Text, Icon, IconButton, FormControl, Input, Button } from 'native-base'
+import { Stack, Text, Icon, IconButton, FormControl, Input, Button, useToast } from 'native-base'
 import { View , Image, StyleSheet } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
-import { toggleLoading } from '../../redux/reducer/loading'
+import { useSelector ,useDispatch } from 'react-redux'
+import { baseURL } from '../../api'
+import { setCardInfo } from '../../redux/reducer/payMethod'
 import SelectDropdown from 'react-native-select-dropdown'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import axios from 'axios'
 
 const paymentOptions = [
     {
@@ -27,13 +29,44 @@ const AddPayment = () => {
     const [payment, setPayment] = useState()
     const { navigate } = useNavigation()
     const { control , handleSubmit, formState: {errors}, reset, register, setValue, watch } = useForm()
+    const { email } = useSelector(state => state.userInfo.value)
+    const cardList = useSelector(state => state.payMethod.value)
+    const toast = useToast()
+
+    const onSubmit = data => {
+
+        const { card_id, name, id } = data
+
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/linkcard.php`,
+            data: {
+                email: email,
+                cardnumber: card_id,
+                name: name,
+                cccd: id,
+                type: payment
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0) {
+                dispatch(setCardInfo({
+                    index: cardList.length,
+                    label: payment,
+                    cardNumber: card_id,
+                    fee: 'Free payment'
+                }))
+                toast.show({
+                    title: response.data.data,
+                    duration: 2500
+                })
+            }
+        })
+    }
 
     const returnDeposit = () => {
-        dispatch(toggleLoading())
+        reset()
         navigate('Deposit')
-        setTimeout(() => {
-            dispatch(toggleLoading())
-        }, 700)
     }
 
     const styles = StyleSheet.create({ 
@@ -185,7 +218,7 @@ const AddPayment = () => {
                     </FormControl>
                 </Stack>
             </Stack>
-            <Button fontSize={18}>Add now</Button>
+            <Button isDisabled={!payment} fontSize={18} onPress={handleSubmit(onSubmit)}>Add now</Button>
         </Stack>
     )
 }

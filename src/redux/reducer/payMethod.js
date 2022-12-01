@@ -3,14 +3,21 @@ import { createSlice } from "@reduxjs/toolkit"
 export const payMethod = createSlice({
     name: 'payMethod',
     initialState: {
-        value: 0,
+        value: [],
+        selectedId: 0,
     },
     reducers: {
-        paymentSelected: (state, actions) => {
-            state.value = actions.payload
-        } 
+        setCardInfo: (state, actions) => {
+            state.value.push(actions.payload)
+        },
+        setSelectedId: (state, actions) => {
+            state.selectedId = actions.payload
+        },
+        clearCardInfo: state => {
+            state.value = []
+        }
     }
 })
 
-export const { paymentSelected } = payMethod.actions
+export const { setCardInfo, setSelectedId, clearCardInfo } = payMethod.actions
 export default payMethod.reducer

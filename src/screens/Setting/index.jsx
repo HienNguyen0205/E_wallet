@@ -1,24 +1,28 @@
 import React from 'react'
 import { Stack, Text, Avatar, Pressable, Switch, Button } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
+import { useSelector ,useDispatch } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { signOut } from '../../redux/reducer/isSignIn'
 import { toggleLoading } from '../../redux/reducer/loading'
+import { clearUserInfo } from '../../redux/reducer/userInfo'
 
 const Setting = () => {
 
     const { navigate } = useNavigation()
     const dispatch = useDispatch()
+    const name = useSelector(state => state.userInfo.name)
 
     const signout = () => {
         return new Promise(resolve => {
             dispatch(signOut())
+            dispatch(clearUserInfo())
+            resolve()
         })
     }
 
     async function backLogin() {
-        const check = await signout()
+        await signout()
         dispatch(toggleLoading())
         navigate('Login')
         setTimeout(() => {
@@ -32,7 +36,7 @@ const Setting = () => {
                 <Stack direction='row' borderRadius='xl' bg='#2e303c' p={4} alignItems='center'>
                     <Avatar source={require('../../assets/Images/User_Image/User.png')} mr={3}/>
                     <Stack justifyContent='space-around' flex={1}>
-                        <Text color='white' fontSize={18}>Wjbu rách</Text>
+                        <Text color='white' fontSize={18}>{name}</Text>
                         <Text color='#1aa270' fontSize={16}>Verified</Text>
                     </Stack>
                     <Icon name='keyboard-arrow-right' size={32} color='white'/>

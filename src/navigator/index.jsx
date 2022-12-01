@@ -37,7 +37,6 @@ const opt = {
     open: config,
     close: config,
   },
-  presentation: 'modal',
 }
 
 function AppNavigator() {

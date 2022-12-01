@@ -1,21 +1,16 @@
 import React from 'react'
 import { Stack , Text, IconButton, Icon, Avatar } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
-import { toggleLoading } from '../../redux/reducer/loading'
+import { useSelector } from 'react-redux'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 const UserInfo = () => {
 
-    const dispatch = useDispatch()
+    const { name, birthday, address, createAt } = useSelector(state => state.userInfo.value)
     const { navigate } = useNavigation()
 
     const returnSetting = () => {
-        dispatch(toggleLoading())
         navigate('Setting')
-        setTimeout(() => {
-            dispatch(toggleLoading())
-        }, 700)
     }
 
     return (
@@ -34,19 +29,19 @@ const UserInfo = () => {
             <Stack borderRadius='2xl' p={4} bg='#2e303c' space={7}>
                 <Stack direction='row' justifyContent='space-between'>
                     <Text color='white' fontSize={16}>Name</Text>
-                    <Text color='white' fontSize={16}>Wibu</Text>
-                </Stack>
-                <Stack direction='row' justifyContent='space-between'>
-                    <Text color='white' fontSize={16}>Gender</Text>
-                    <Text color='white' fontSize={16}>Female</Text>
+                    <Text color='white' fontSize={16}>{name}</Text>
                 </Stack>
                 <Stack direction='row' justifyContent='space-between'>
                     <Text color='white' fontSize={16}>Date of birth</Text>
-                    <Text color='white' fontSize={16}>02/05/2002</Text>
+                    <Text color='white' fontSize={16}>{birthday}</Text>
                 </Stack>
                 <Stack direction='row' justifyContent='space-between'>
-                    <Text color='white' fontSize={16}>ID No</Text>
-                    <Text color='white' fontSize={16}>123456789</Text>
+                    <Text color='white' fontSize={16}>Address</Text>
+                    <Text color='white' fontSize={16}>{address}</Text>
+                </Stack>
+                <Stack direction='row' justifyContent='space-between'>
+                    <Text color='white' fontSize={16}>Create at</Text>
+                    <Text color='white' fontSize={16}>{createAt}</Text>
                 </Stack>
             </Stack>
         </Stack>

@@ -7,19 +7,25 @@ export const userInfo = createSlice({
             email: '',
             tel: '',
             balance: 0,
+            name: '',
+            birthday: '',
+            address: '',
+            createAt: ''
         }
     },
     reducers: {
         setUserInfo: (state, actions) => {
-            state.value = {
-                ...state.value, ...actions.payload
-            }
+            state.value = {...state.value, ...actions.payload}
         },
         clearUserInfo: state => {
             state.value = {
                 email: '',
                 tel: '',
                 balance: 0,
+                name: '',
+                birthday: '',
+                address: '',
+                createAt: ''
             }
         }
     }

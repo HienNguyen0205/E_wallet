@@ -21,7 +21,7 @@ const Register = () => {
 
     const onSubmit = data => {
 
-        const { tel , email, password } = data
+        const { tel , email, password, name } = data
 
         dispatch(toggleLoading())
         
@@ -30,13 +30,14 @@ const Register = () => {
             url: `http://${baseURL}:80/E_Wallet_API/api/user/register.php`,
             data: {
                 phone: tel,
+                name: name,
                 email: email,
                 password: password,
             },
         })
         .then(response => {
             if(response.data.code === 0){
-                dispatch(setUserInfo({email: email, tel: tel}))
+                dispatch(setUserInfo({email: email, tel: tel, name: name}))
                 dispatch(toggleLoading())
                 changeScreen('OTP')
             }
@@ -53,6 +54,25 @@ const Register = () => {
             <Box p="2" py="8" w="80%">
                 <VStack space={3} mt="5">
                     <Logo/>
+                    <FormControl isRequired isInvalid={'name' in errors}>
+                        <Controller control={control}
+                            render = {({field}) => (
+                                <Input type='text'
+                                    variant={'fill'}
+                                    placeholder="Enter your name"
+                                    {...field}
+                                    onChangeText={text => field.onChange(text)}
+                                />
+                            )}
+                            name='name'
+                            rules={{
+                                required: 'Please enter your name',
+                            }}
+                        />
+                        <FormControl.ErrorMessage leftIcon={<Icon as={Ionicons} name="warning" size={3} color="#ef4444"/>}>
+                            {errors.name?.message}
+                        </FormControl.ErrorMessage>
+                    </FormControl>
                     <FormControl isRequired isInvalid={'email' in errors}>
                         <Controller control={control}
                             render = {({field}) => (
