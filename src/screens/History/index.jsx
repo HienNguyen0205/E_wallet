@@ -1,38 +1,30 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ScrollView, Stack, Box, Text, Icon } from 'native-base'
 import { useSelector } from 'react-redux'
 import { baseURL } from '../../api'
 import TransHis from '../../components/TransHistory'
 import Feather from 'react-native-vector-icons/Feather'
 import axios from 'axios'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-
-const data = [
-    {
-        Icon: MaterialCommunityIcons,
-        name: 'tray-arrow-down',
-        label: 'Deposit',
-        dateTime: '12:01 am   21 Jun 2021',
-        amount: 100,
-    },
-]
 
 const History = () => {
 
     const { email, balance } = useSelector(state => state.userInfo.value)
+    const [data, setData] = useState([])
 
-    // useEffect(() => {
-    //     axios({
-    //         method: 'post',
-    //         url: `http://${baseURL}:80/E_Wallet_API/api/user/gettrans.php`,
-    //         data: {
-    //             email: email
-    //         }
-    //     })
-    //     .then(response => {
-    //         console.log(response.data.data)
-    //     })
-    // }, [balance, email])
+    useEffect(() => {
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/gettrans.php`,
+            data: {
+                email: email
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0){
+                setData(response.data.data.reverse())
+            }
+        })
+    }, [balance, email])
 
     return (
         <Stack flex={1} w='100%' p="4" py="6" bg='#171928'>
@@ -66,18 +58,29 @@ const History = () => {
                     </Box>
                 </Stack>
             </Box>
-            <Stack direction='row' mt={5} justifyContent='space-between'>
-                <Text color='white' fontSize={18} fontWeight='bold'>Today</Text>
-                <Text color='#9f9fa5'>(3 Transaction)</Text>
-            </Stack>
-            <Stack style={{height: 376}}>
+            <Stack style={{height: 416}} mt={3}>
                 <ScrollView>
-                    {data?.map((item, index) =>
-                        <TransHis key={index} Icon={item.Icon} name={item.name}
-                            label={item.label} dateTime={item.dateTime}
-                            amount={item.amount}
-                        />
-                    )}
+                    {data?.map((item, index) => {
+
+                        const months = ['January','February','March','April','May','June','July','August','September','October','November','December'].reverse()
+                        const displayMonth = months[index]
+
+                        return (
+                            <Stack key={index}>
+                                {item.length > 0 && index === 0 && <Stack direction='row' mt={5} justifyContent='space-between' alignItems='center'>
+                                    <Text color='white' fontSize={20} fontWeight='bold'>{displayMonth}</Text>
+                                    <Text color='#9f9fa5'>({item.length} Transaction)</Text>
+                                </Stack>}
+                                {item.length > 0 && item.map((transaction, index) => 
+                                    <TransHis key={index} transferType={transaction.approval}
+                                        label={transaction.transtype} 
+                                        dateTime={transaction.datetrans}
+                                        amount={transaction.amount}
+                                    />
+                                )}
+                            </Stack>
+                        )
+                    })}
                 </ScrollView>
             </Stack>
         </Stack>

@@ -1,14 +1,13 @@
 import React from 'react'
-import { Center, Text, Icon } from 'native-base'
-import Entypo from 'react-native-vector-icons/Entypo'
+import { Center, Image, Stack } from 'native-base'
 
 const Logo = () => {
+
+    const src = require('../../assets/Images/Logo/logo.png')
+
     return (
-        <Center w="100%" mb={10}>
-            <Icon as={Entypo} name="wallet" size={54} color="#ffffff"/>
-            <Text fontSize={'2xl'} fontWeight={'bold'} color="#ffffff">
-                E-wallet
-            </Text>
+        <Center w="100%">
+            <Image source={src} alt='' resizeMode='contain' style={{width: 120, height: 180}}/>
         </Center>
     )
 }

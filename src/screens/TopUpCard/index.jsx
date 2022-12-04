@@ -1,44 +1,95 @@
-import React, { useState, useRef } from 'react'
-import { Stack , Text, IconButton, Icon, Button, Image } from 'native-base'
-import { StyleSheet, View,  Image as ReactImage } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Stack , Text, IconButton, Icon, Button, Image, Pressable, useToast } from 'native-base'
+import { StyleSheet, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
-import { toggleLoading } from '../../redux/reducer/loading'
+import { useSelector ,useDispatch } from 'react-redux'
+import { setCode, setModalState } from '../../redux/reducer/transPassModal'
+import { baseURL } from '../../api'
+import { setUserInfo } from '../../redux/reducer/userInfo'
 import SelectDropdown from 'react-native-select-dropdown'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import axios from 'axios'
+import TransPass from '../../components/TransPass'
 
 const operatorName = [
     {
-        title: 'Viettel',
+        title: 'viettel',
         logo: require('../../assets/Images/Logo/Viettel_logo.png'),
     },
     {
-        title: 'Mobifone',
+        title: 'mobifone',
         logo: require('../../assets/Images/Logo/Mobifone_logo.png'),
     },
     {
-        title: 'Vinaphone',
+        title: 'vinaphone',
         logo: require('../../assets/Images/Logo/Vinaphone_logo.png'),
     },
 ]
 
-const cardTypes = ['$ 10','$ 25', '$ 35', '$ 50', '$75']
+const cardTypes = ['$ 10','$ 25', '$ 35', '$ 50', '$ 75']
 
 const TopUpCard = () => {
 
     const dispatch = useDispatch()
-    const [operator, setOperator] = useState('')
+    const [operator, setOperator] = useState(0)
     const [type, setType] = useState('')
+    const [showCard, setShowCard] = useState({isShow: false, cardSeri: '', cardCode: ''})
     const { navigate } = useNavigation()
+    const toast = useToast()
+    const { email, balance, tel } = useSelector(state => state.userInfo.value)
+    const code = useSelector(state => state.transPassModal.code)
+
+    const updateBalance = () => {
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/userdetail.php`,
+            data: {
+                phone: tel,
+            }
+        })
+        .then(response => {
+            const { balance } = response.data.data
+            dispatch(setUserInfo({
+                balance: balance,
+            }))
+        })
+    }
+
+    const topupCard = () => {
+
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/topupcard.php`,
+            data: {
+                email: email,
+                passtrans: code,
+                networkname: operatorName[operator].title,
+                price: type.slice(2),
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0){
+                updateBalance()
+                const { cardseri, cardcode } = response.data.data
+                setShowCard({
+                    isShow: true,
+                    cardSeri: cardseri,
+                    cardCode: cardcode
+                })
+            }
+            dispatch(setCode(''))
+        })
+    }
+
+    useEffect(() => {
+        if(code.length === 6){
+            topupCard()
+        }
+    }, [code])
 
     const returnHome = () => {
-        dispatch(toggleLoading())
         navigate('Home')
-        setTimeout(() => {
-            dispatch(toggleLoading())
-        }, 700)
     }
 
     const styles = StyleSheet.create({ 
@@ -84,41 +135,19 @@ const TopUpCard = () => {
                     resizeMode='contain' borderRadius='xl'/>
                 <Stack space={2} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
                     <Text fontSize={22}>Available balance</Text>
-                    <Text fontSize={32} fontWeight='bold'>$ 10000000000</Text>
+                    <Text fontSize={32} fontWeight='bold'>$ {balance}</Text>
                 </Stack>
             </Stack>
-            <Stack borderRadius='xl' bg='#2e303c' py={2} px={3} space={3}>
+            {!showCard.isShow ? <Stack borderRadius='xl' bg='#2e303c' py={2} px={3} space={3}>
                 <Stack space={3}>
-                    <Stack>
-                        <Text color='white' fontSize={14} mb={2}>Select network operator</Text>
-                        <SelectDropdown
-                            data={operatorName}
-                            onSelect={item => setOperator(item)}
-                            buttonStyle={styles.dropdownBtn}
-                            renderCustomizedButtonChild={selectedItem => {
-                                return (
-                                    <View style={styles.dropdownChild}>
-                                    {operator ? (
-                                        <ReactImage source={selectedItem.logo} style={styles.dropdownBtnImage}/>
-                                    ) : (
-                                        <MaterialCommunityIcons name="access-point-network" color={'#444'} size={28} style={{marginRight: 4}}/>
-                                    )}
-                                        <Text color='black' mr={6} fontSize={18}>{selectedItem ? selectedItem.title : 'Select network operator'}</Text>
-                                        <FontAwesome name="chevron-down" color={'#444'} size={18} />
-                                    </View>
-                                )
-                            }}
-                            dropdownStyle={styles.dropdownBg}
-                            rowStyle={{height: 46}}
-                            renderCustomizedRowChild={item => {
-                                return (
-                                    <View style={styles.dropdownRow}>
-                                        <Image source={item.logo} style={styles.dropdownBtnImage} alt=''/>
-                                        <Text color='black'>{item.title}</Text>
-                                    </View>
-                                )
-                            }}
-                        />
+                    <Stack space={2} direction='row' mt={2}>
+                        {operatorName.map((item, index) =>
+                            <Stack key={index} borderColor={operator === index ? '#20a5f2' : '#fff'} borderWidth={1} flex={1} style={{height: 48}} borderRadius='lg'>
+                                <Pressable onPress={() => setOperator(index)}>
+                                    <Image source={item.logo} alt="" resizeMode='contain' style={{height: 48}}/>
+                                </Pressable>
+                            </Stack>
+                        )}
                     </Stack>
                     <Stack>
                         <Text color='white' fontSize={14} mb={2}>Select type</Text>
@@ -146,10 +175,26 @@ const TopUpCard = () => {
                         />
                     </Stack>
                 </Stack>
-            </Stack>
-            <Button variant={operator && type ? 'solid' : 'outline'} fontSize={18}>
+            </Stack> : <Stack borderRadius='xl' bg='#2e303c' py={2} px={3} space={3}>
+                <Stack>
+                    <Text color='white' fontWeight={14} mb={2}>Card seri</Text>
+                    <Stack borderRadius='xl' bg='white' py={2} px={1}>
+                        <Text fontSize={16}>{showCard.cardSeri}</Text>
+                    </Stack>
+                </Stack>
+                <Stack>
+                    <Text color='white' fontWeight={14} mb={2}>Card number</Text>
+                    <Stack borderRadius='xl' bg='white' py={2} px={1}>
+                        <Text fontSize={16}>{showCard.cardCode}</Text>
+                    </Stack>
+                </Stack>
+            </Stack>}
+            {showCard.isShow ? <Button fontSize={18} onPress={() => setShowCard({isShow: false, cardSeri: '', cardCode: ''})}>
+                Buy another card
+            </Button> : <Button isDisabled={type === ''} fontSize={18} onPress={() => dispatch(setModalState(true))}>
                 Top-up card
-            </Button>
+            </Button>}
+            <TransPass/>
         </Stack>
     )
 }

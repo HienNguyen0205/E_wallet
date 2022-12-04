@@ -147,7 +147,7 @@ const SetTransPass = () => {
                     textContentType="password"
                     renderCell={renderCell}
                 />
-                <Button mt={6} onPress={() => onSubmit()}>Create Password</Button>
+                <Button w='100%' mt={6} onPress={() => onSubmit()}>Create Password</Button>
                 <Link _text={{
                     color: "indigo.500",
                     fontWeight: "medium",

@@ -31,18 +31,17 @@ const Home = () => {
             }
         })
         .then(response => {
-            const { name, email, phone, birthday, address, createAt, balance } = response.data.data
+            const { name, email, birthday, address, createAt, balance } = response.data.data
             dispatch(setUserInfo({
                 name: name,
                 email: email,
-                tel: phone,
                 birthday: birthday,
                 address: address,
                 createAt: createAt,
                 balance: balance,
             }))
         })
-    }, [tel, balance])
+    }, [tel])
 
     return (
         <Stack flex={1} w='100%' p="4" py="6" bg='#171928'>
@@ -59,7 +58,7 @@ const Home = () => {
             <Box height={300}>
                 <ZStack>
                     <Box height={300} alignItems='center'>
-                        <Image source={require('../../assets/Images/UI_Bg/card.png')} alt='Card' resizeMode="contain" flex={1} />
+                        <Image source={require('../../assets/Images/UI_Bg/card.png')} alt='Card' resizeMode="contain" flex={1}/>
                     </Box>
                     <Text mt='20' ml='8' color='#ffffff' fontSize={24} fontWeight='bold'>{name}</Text>
                     <Box mt='40' ml='8'>

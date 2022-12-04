@@ -137,7 +137,7 @@ const Withdraw = () => {
                         name='amount'
                         rules={{
                             required: 'Please enter amount',
-                            validate: value => Number(value) >= 1 || 'Amount is invalid'
+                            validate: value => (Number(value) >= 1 && Number(value) < Number(balance)) || 'Amount is invalid'
                         }}
                     />
                     <FormControl.ErrorMessage leftIcon={<Icon as={Ionicons} name="warning" size={2} color="#ef4444"/>}>
