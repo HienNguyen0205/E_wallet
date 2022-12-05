@@ -59,7 +59,7 @@ const Login = () => {
         navigate(target)
         setTimeout(() => {
             dispatch(toggleLoading())
-        }, 700)
+        }, 400)
     }
 
     return (

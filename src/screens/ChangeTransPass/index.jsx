@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Center, Text, Stack, useToast } from 'native-base'
+import { Center, Text, Stack, useToast, IconButton, Icon } from 'native-base'
 import { Animated, StyleSheet } from 'react-native'
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field'
 import { useNavigation } from '@react-navigation/native'
@@ -7,6 +7,7 @@ import { useSelector ,useDispatch } from 'react-redux'
 import { signIn } from '../../redux/reducer/isSignIn'
 import { baseURL } from '../../api'
 import axios from 'axios'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 const { Value, Text: AnimatedText } = Animated
 
@@ -193,7 +194,7 @@ const ChangeTransPass = () => {
     }
 
     return (
-        <Center w="100%" flex={1} backgroundColor='#272a3f' justifyContent='center'>
+        <Stack space={6} flex={1} w='100%' p="4" py="6" bg='#171928'>
             <Stack direction='row' alignItems='center'>
                 <IconButton size='md' variant='solid' onPress={() => returnSetting()}
                     icon={<Icon as={MaterialIcons} name='keyboard-arrow-left' color='white' />}
@@ -201,7 +202,7 @@ const ChangeTransPass = () => {
                 <Text flex={1} fontSize={24} fontWeight='bold' textAlign='center' color='white' mr={5}>Change Trans Password</Text>
             </Stack>
             <Stack justifyContent='space-around' alignItems='center' space={4}>
-                <Text color='white' fontSize={32} fontWeight='bold' mt={6}>{changPassState[state]}</Text>
+                <Text color='white' fontSize={32} textAlign='center' mt={6}>{changPassState[state]}</Text>
                 <CodeField
                     ref={ref}
                     {...props}
@@ -214,7 +215,7 @@ const ChangeTransPass = () => {
                     renderCell={renderCell}
                 />
             </Stack>
-        </Center>
+        </Stack>
     )
 }
 
