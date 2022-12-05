@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack, Text, Avatar, Pressable, Switch, Button } from 'native-base'
+import { Stack, Text, Avatar, Pressable, Switch, Button, useToast } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector ,useDispatch } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -11,7 +11,8 @@ const Setting = () => {
 
     const { navigate } = useNavigation()
     const dispatch = useDispatch()
-    const name = useSelector(state => state.userInfo.name)
+    const { name } = useSelector(state => state.userInfo.value)
+    const toast = useToast()
 
     const signout = () => {
         return new Promise(resolve => {
@@ -49,18 +50,27 @@ const Setting = () => {
                         <Icon name='keyboard-arrow-right' size={32} color='white'/>
                     </Stack>
                 </Pressable>
-                <Stack direction='row' alignItems='center'>
-                    <Text color='white' fontSize={18} flex={1}>Change transaction password</Text>
-                    <Icon name='keyboard-arrow-right' size={32} color='white'/>
-                </Stack>
-                <Stack direction='row' alignItems='center'>
+                <Pressable onPress={() => navigate('ChangeTransPass')}>
+                    <Stack direction='row' alignItems='center'>
+                        <Text color='white' fontSize={18} flex={1}>Change transaction password</Text>
+                        <Icon name='keyboard-arrow-right' size={32} color='white'/>
+                    </Stack>
+                </Pressable>
+                {/* <Stack direction='row' alignItems='center'>
                     <Text color='white' fontSize={18} flex={1}>Dark mode</Text>
                     <Switch defaultIsChecked colorScheme="secondary" />
-                </Stack>
-                <Stack direction='row' alignItems='center'>
-                    <Text color='white' fontSize={18} flex={1}>About us</Text>
-                    <Icon name='keyboard-arrow-right' size={32} color='white'/>
-                </Stack>
+                </Stack> */}
+                <Pressable onPress={() => toast.show({render: () => {
+                    return (
+                        <Stack bg='muted.700' px="2" py="1" rounded="sm" mb={5}>
+                            <Text color='white' textAlign='center'>E-wallet designed by Nguyen Cong Hien & Nguyen Xuan Binh</Text>
+                        </Stack>
+                    )}})}>
+                    <Stack direction='row' alignItems='center'>
+                        <Text color='white' fontSize={18} flex={1}>About us</Text>
+                        <Icon name='keyboard-arrow-right' size={32} color='white'/>
+                    </Stack>
+                </Pressable>
             </Stack>
             <Button mt={3} bg='#ee3356' px={2} onPress={() => backLogin()}>Log out</Button>
         </Stack>

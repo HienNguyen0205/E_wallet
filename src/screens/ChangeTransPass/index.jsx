@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Center, Button, Text, Link, Stack, useToast } from 'native-base'
+import { Center, Text, Stack, useToast } from 'native-base'
 import { Animated, StyleSheet } from 'react-native'
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector ,useDispatch } from 'react-redux'
 import { signIn } from '../../redux/reducer/isSignIn'
 import { baseURL } from '../../api'
-import Logo from '../../components/Logo'
 import axios from 'axios'
 
 const { Value, Text: AnimatedText } = Animated
@@ -28,10 +27,14 @@ const animateCell = ({ hasValue, index, isFocused }) => {
     ]).start()
 }
 
-const SetTransPass = () => {
+const changPassState = ['Enter Old Transaction Password', 'Enter New Transaction Password', 'Confirm New Transaction Password']
+
+const ChangeTransPass = () => {
 
     const { email } = useSelector(state => state.userInfo.value)
     const [value, setValue] = useState('')
+    const [state, setState] = useState(0)
+    const [newPass, setNewPass] = useState('')
     const { navigate } = useNavigation()
     const dispatch = useDispatch()
     const ref = useBlurOnFulfill({ value, cellCount: 6 })
@@ -63,13 +66,71 @@ const SetTransPass = () => {
             }else{
                 setValue('')
             }
-            toast.show({
-                title: response.data.data,
-                duration: 2500,
-            })
         })
         
     }
+
+    const checkTransPass = () => {
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/checkpasstrans.php`,
+            data: {
+                email: email,
+                passtrans: value
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0) {
+                setState(1)
+            }
+            setValue('')
+            toast.show({
+                title: response.data.data,
+                duration: 2500
+            })
+        })
+    }
+
+    const handleNewPass = () => {
+        setNewPass(value)
+        setState(2)
+        setValue('')
+    }
+
+    const handleConfirm = () => {
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/changpasstrans.php`,
+            data: {
+                email: email,
+                newpasstrans: value
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0){
+                setState(0)
+            }
+            setValue('')
+            toast.show({
+                title: response.data.data,
+                duration: 2500
+            })
+        })
+    }
+
+    useEffect(() => {
+        if(value.length === 6){
+            if(state === 0){
+                checkTransPass()
+            }
+            if(state === 1){
+                handleNewPass()
+            }
+            if(state === 2 && newPass === value){
+                handleConfirm()
+            }
+        }
+    }, [value])
 
     const styles = StyleSheet.create({
         codeFieldRoot: {
@@ -133,9 +194,14 @@ const SetTransPass = () => {
 
     return (
         <Center w="100%" flex={1} backgroundColor='#272a3f' justifyContent='center'>
+            <Stack direction='row' alignItems='center'>
+                <IconButton size='md' variant='solid' onPress={() => returnSetting()}
+                    icon={<Icon as={MaterialIcons} name='keyboard-arrow-left' color='white' />}
+                    bg='#2e303c' borderRadius="md" />
+                <Text flex={1} fontSize={24} fontWeight='bold' textAlign='center' color='white' mr={5}>Change Trans Password</Text>
+            </Stack>
             <Stack justifyContent='space-around' alignItems='center' space={4}>
-                <Logo />
-                <Text color='white' fontSize={32} fontWeight='bold' mt={6}>Create transaction pass</Text>
+                <Text color='white' fontSize={32} fontWeight='bold' mt={6}>{changPassState[state]}</Text>
                 <CodeField
                     ref={ref}
                     {...props}
@@ -148,14 +214,8 @@ const SetTransPass = () => {
                     renderCell={renderCell}
                 />
             </Stack>
-            <Button mt={6} onPress={() => onSubmit()}>Create Password</Button>
-            <Link _text={{
-                color: "indigo.500",
-                fontWeight: "medium",
-                fontSize: "md"
-            }} onPress={() => navigate('Login')}>Back to Login</Link>
         </Center>
     )
 }
 
-export default SetTransPass
+export default ChangeTransPass

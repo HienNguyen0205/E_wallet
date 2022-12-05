@@ -1,42 +1,14 @@
-import React, {useState} from 'react'
+import React, { useState , useEffect} from 'react'
 import { Stack, Box, Button, Text, Icon } from 'native-base'
 import { StyleSheet, Dimensions } from 'react-native'
 import { LineChart, PieChart } from 'react-native-chart-kit'
+import { useSelector, useDispatch } from 'react-redux'
+import { baseURL } from '../../api'
 import SelectDropdown from 'react-native-select-dropdown'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import axios from 'axios'
 
-const selectItems = ['Daily','Weekly','Monthly']
-
-const data = [
-    {
-        name: "% Deposit",
-        percent: 25,
-        color: "rgba(131, 167, 234, 1)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 14
-    },
-    {
-        name: "% Withdraw",
-        percent: 25,
-        color: "blue",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 14
-    },
-    {
-        name: "% Transfer",
-        percent: 25,
-        color: "red",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 14
-    },
-    {
-        name: "% Top-up card",
-        percent: 25,
-        color: "#ffffff",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 14
-    },
-]
+const selectItems = ['Daily','Monthly']
 
 const chartConfig = {
     backgroundGradientFrom: "#2e303c",
@@ -51,10 +23,105 @@ const chartConfig = {
     }
 }
 
+var pieData = [
+    {
+        name: "% Deposit",
+        percent: 0,
+        color: "rgba(131, 167, 234, 1)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 14
+    },
+    {
+        name: "% Withdraw",
+        percent: 0,
+        color: "blue",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 14
+    },
+    {
+        name: "% Transfer",
+        percent: 0,
+        color: "red",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 14
+    },
+    {
+        name: "% Top-up card",
+        percent: 0,
+        color: "#ffffff",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 14
+    },
+]
+
 const Statistic = () => {
 
     const [activeIndex, setActiveIndex] = useState(0)
     const [chartType, setChartType] = useState('Daily')
+    const { email, balance } = useSelector(state => state.userInfo.value)
+    const [dataLine, setDataLine] = useState({income: [0,0,0,0,0], expend: [0,0,0,0,0]})
+
+    const getFiveDays = () => {
+        const date = new Date()
+        date.setDate(date.getDate() - 5)
+        const fiveDays = []
+        for(let i = 0; i < 5;i++){
+            date.setDate(date.getDate() + 1)
+            fiveDays.push(date.getDate()+'/'+date.getMonth())
+        }
+        return fiveDays
+    }
+
+    const getFiveMonths = () => {
+        const month= ["January","February","March","April","May","June","July",
+            "August","September","October","November","December"]
+        const date = new Date()
+        date.setMonth(date.getMonth() - 5)
+        const fiveMonths = []
+        for(let i = 0; i < 5;i++){
+            date.setMonth(date.getMonth() + 1)
+            fiveMonths.push(month[date.getMonth()])
+        }
+        return fiveMonths
+    }
+
+    useEffect(() => {
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/getchart.php`,
+            data: {
+                email: email,
+                datetype: chartType
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0){
+                const data = response.data.data.reverse()
+                const lastedData = data[data.length - 1]
+                const total = lastedData.deposit + lastedData.withdraw + lastedData.transferIn + lastedData.transferOut + lastedData.topupcard
+                let pie = [0,0,0,0,0]
+                if(total !== 0){
+                    pie = [lastedData.deposit/total*100, lastedData.withdraw/total*100, (lastedData.transferIn + lastedData.transferOut)/total*100, lastedData.topupcard/total*100]
+                }
+                pieData.map((item, index) => {
+                    item.percent = pie[index]
+                })
+                let income = []
+                let expend = []
+                if(activeIndex === 0){
+                    data.forEach(item => {
+                        income.push(item.deposit + item.transferIn)
+                    })
+                    setDataLine({...dataLine, income: income})
+                }else{
+                    data.forEach(item => {
+                        expend.push(item.withdraw + item.transferOut + item.topupcard)
+                    })
+                    setDataLine({...dataLine, expend: expend})
+                }
+            }
+        })
+    }, [email, chartType, activeIndex, balance])
 
     const styles = StyleSheet.create({
         dropdownBtn: {
@@ -83,7 +150,7 @@ const Statistic = () => {
                 <Button onPress={() => setActiveIndex(1)} w='48%' bg={activeIndex === 1 ? '#f66d97' : '#2e303c'}>Expend</Button>
             </Stack>
             <Stack direction='row' justifyContent='space-between' alignItems='center' mb={3}>
-                <Text color='white' fontSize={28} fontWeight='bold'>$ 100000000</Text>
+                <Text color='white' fontSize={28} fontWeight='bold'>$ {balance}</Text>
                 <SelectDropdown  data={selectItems} onSelect={item => {setChartType(item)}}
                     buttonTextAfterSelection={selectedItem => selectedItem} buttonStyle={styles.dropdownBtn}
                     rowTextForSelection={item => item} defaultValue='Daily' buttonTextStyle={styles.dropdownText}
@@ -97,17 +164,10 @@ const Statistic = () => {
             <Stack space={3}>
                 <LineChart
                     data={{
-                        labels: ["1/11", "2/11", "3/11", "4/11", "5/11", "6/11"],
+                        labels: chartType === 'Daily' ? getFiveDays() : getFiveMonths(),
                         datasets: [
                             {
-                                data: [
-                                    Math.random() * 100,
-                                    Math.random() * 100,
-                                    Math.random() * 100,
-                                    Math.random() * 100,
-                                    Math.random() * 100,
-                                    Math.random() * 100,
-                                ]
+                                data: activeIndex === 0 ? dataLine.income : dataLine.expend
                             }
                         ]
                     }}
@@ -123,7 +183,7 @@ const Statistic = () => {
                     }}
                 />
                 <PieChart
-                    data={data}
+                    data={pieData}
                     width={Dimensions.get("window").width -30}
                     height={Dimensions.get('window').height - 520}
                     chartConfig={chartConfig}

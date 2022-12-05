@@ -1,15 +1,15 @@
 import React, { useState, useRef } from 'react'
-import { Stack, Text, IconButton, Icon, Input, FormControl, Button, Pressable, Modal } from 'native-base'
+import { Stack, Text, IconButton, Icon, Input, FormControl, Button, Pressable, Modal, useToast } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
-import { toggleLoading } from '../../redux/reducer/loading'
+import { useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
+import { baseURL } from '../../api'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import axios from 'axios'
 
 const ChangePass = () => {
 
-    const dispatch = useDispatch()
     const { navigate } = useNavigation()
     const { control, handleSubmit, formState: { errors, isValid }, reset, register, setValue, watch } = useForm({mode: 'onChange'})
     const [showOldPwd, setShowOldPwd] = useState(false)
@@ -19,18 +19,35 @@ const ChangePass = () => {
     oldPass.current = watch('old_pass', '')
     newPass.current = watch('new_pass', '')
     const [showModal, setShowModal] = useState(false)
+    const toast = useToast()
+    const { email } = useSelector(state => state.userInfo.value) 
 
     const returnSetting = () => {
-        dispatch(toggleLoading())
+        reset()
         navigate('Setting')
-        setTimeout(() => {
-            dispatch(toggleLoading())
-        }, 700)
     }
 
     const onSubmit = data => {
         setShowModal(false)
-        reset()
+        const { old_pass, new_pass } = data
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/changepassword.php`,
+            data: {
+                email: email,
+                curr_pass: old_pass,
+                new_pass: new_pass
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0){
+                reset()
+            }
+            toast.show({
+                title: response.data.data,
+                duration: 2500
+            })
+        })
     }
 
     const confirm = () => {

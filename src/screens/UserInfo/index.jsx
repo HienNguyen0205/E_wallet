@@ -23,7 +23,7 @@ const UserInfo = () => {
             </Stack>
             <Stack alignItems='center'>
                 <Avatar source={require('../../assets/Images/User_Image/User.png')} size='xl'>
-                    <Avatar.Badge bg='amber.500'/>
+                    <Avatar.Badge bg='#1aa270'/>
                 </Avatar>
             </Stack>
             <Stack borderRadius='2xl' p={4} bg='#2e303c' space={7}>

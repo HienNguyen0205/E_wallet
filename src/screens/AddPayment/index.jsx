@@ -56,11 +56,12 @@ const AddPayment = () => {
                     cardNumber: card_id,
                     fee: 'Free payment'
                 }))
-                toast.show({
-                    title: response.data.data,
-                    duration: 2500
-                })
             }
+            toast.show({
+                title: response.data.data,
+                duration: 2500
+            })
+            reset()
         })
     }
 

@@ -77,7 +77,6 @@ const Withdraw = () => {
     }, [code])
 
     useEffect(() => {
-        console.log(amount.current)
         axios({
             method: 'post',
             url: `http://${baseURL}:80/E_Wallet_API/api/user/getlinkcard.php`,
