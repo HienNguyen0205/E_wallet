@@ -2,7 +2,7 @@ import React, { useState , useEffect} from 'react'
 import { Stack, Box, Button, Text, Icon } from 'native-base'
 import { StyleSheet, Dimensions } from 'react-native'
 import { LineChart, PieChart } from 'react-native-chart-kit'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { baseURL } from '../../api'
 import SelectDropdown from 'react-native-select-dropdown'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -100,18 +100,18 @@ const Statistic = () => {
                 const lastedData = data[data.length - 1]
                 const total = lastedData.deposit + lastedData.withdraw + lastedData.transferIn + lastedData.transferOut + lastedData.topupcard
                 let pie = [0,0,0,0,0]
+                let sum = 0
                 if(total !== 0){
                     pie = [lastedData.deposit, lastedData.withdraw, (lastedData.transferIn + lastedData.transferOut), lastedData.topupcard]
+                    pieData.map((item, index) => {
+                        if(index === pieData.length - 1){
+                            item.percent = 100 - sum
+                        }else{
+                            item.percent = Math.round(pie[index]/total*100)
+                            sum += item.percent
+                        }
+                    })
                 }
-                let sum = 0
-                pieData.map((item, index) => {
-                    if(index === pieData.length - 1){
-                        item.percent = 100 - sum
-                    }else{
-                        item.percent = Math.round(pie[index]/total*100)
-                        sum += item.percent
-                    }
-                })
                 let income = []
                 let expend = []
                 if(activeIndex === 0){
