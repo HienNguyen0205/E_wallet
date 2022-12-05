@@ -101,10 +101,16 @@ const Statistic = () => {
                 const total = lastedData.deposit + lastedData.withdraw + lastedData.transferIn + lastedData.transferOut + lastedData.topupcard
                 let pie = [0,0,0,0,0]
                 if(total !== 0){
-                    pie = [lastedData.deposit/total*100, lastedData.withdraw/total*100, (lastedData.transferIn + lastedData.transferOut)/total*100, lastedData.topupcard/total*100]
+                    pie = [lastedData.deposit, lastedData.withdraw, (lastedData.transferIn + lastedData.transferOut), lastedData.topupcard]
                 }
+                let sum = 0
                 pieData.map((item, index) => {
-                    item.percent = pie[index]
+                    if(index === pieData.length - 1){
+                        item.percent = 100 - sum
+                    }else{
+                        item.percent = Math.round(pie[index]/total*100)
+                        sum += item.percent
+                    }
                 })
                 let income = []
                 let expend = []
