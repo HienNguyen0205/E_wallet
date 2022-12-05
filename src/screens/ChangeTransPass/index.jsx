@@ -45,30 +45,8 @@ const ChangeTransPass = () => {
     })
     const toast = useToast()
 
-    const userSignIn = () => {
-        return new Promise(resolve => {
-            dispatch(signIn())
-        })
-    }
-
-    const onSubmit = () => {
-        axios({
-            method: 'post',
-            url: `http://${baseURL}:80/E_Wallet_API/api/user/setpasswordtrans.php`,
-            data: {
-                email: email,
-                passtrans: value
-            }
-        })
-        .then(async response => {
-            if(response.data.code === 0) {
-                await userSignIn()
-                navigate('BottomNav')
-            }else{
-                setValue('')
-            }
-        })
-        
+    const returnSetting = () => {
+        navigate('Setting')
     }
 
     const checkTransPass = () => {
