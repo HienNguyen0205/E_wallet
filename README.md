@@ -17,9 +17,15 @@ C:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk
 + Hãy vào phần biến môi trường của Windows như bước trên, và chọn biến Path , sau đó click Edit và chọn New để nhập thêm platform-tools vào biến Path.
 Đường dẫn của thư mục platform-tools có cấu trúc như sau
 C:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools
+
 - Cài đặt node-module
 Trong thư mục code bật terminal gõ lệnh: npm install --legacy-peer-deps
-- Cài đặt mạng:
+
+- Cài đặt API xampp
++ Tải xampp
++ Chuyển folder E_Wallet_API vào trong thư mục htdoc của xampp
++ Lấy port apache của xampp (mặc định là 80)
 + Vào window tìm kiếm terminal gõ lệnh: ipconfig
 + Tìm địa chỉ IPv4 Address và copy
-+ Vào file index.js trong thư mục api và sửa thành ip vừa copy
++ Vào file index.js trong thư mục api sửa đường dẫn ip (phần trước dấu :) thành ip vừa tìm được
++ Phần sau dấu : là port apache của xampp
