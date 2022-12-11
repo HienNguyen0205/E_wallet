@@ -69,7 +69,7 @@ const Transfer = () => {
     }
 
     useEffect(() => {
-        if (phone.current?.length === 10) {
+        if (phone.current?.length === 10 && phone.current !== tel) {
             axios({
                 method: 'post',
                 url: `http://${baseURL}:80/E_Wallet_API/api/user/userdetail.php`,
@@ -79,9 +79,10 @@ const Transfer = () => {
             })
                 .then(response => {
                     if (response.data.code === 0) {
-                        const { name } = response.data.data
+                        const { name, idUser } = response.data.data
                         setReceiverInfo({
-                            name: name
+                            name: name,
+                            id: idUser
                         })
                     }
                 })
@@ -156,7 +157,7 @@ const Transfer = () => {
                         <Avatar source={require('../../assets/Images/User_Image/User.png')} mr={3} />
                         <Stack justifyContent='center' space={1}>
                             <Text color='#d4ffea' fontSize={16}>{receiverInfo?.name}</Text>
-                            <Text color='#d4ffea' fontSize={12}>Id: 123</Text>
+                            <Text color='#d4ffea' fontSize={12}>Id: {receiverInfo?.id}</Text>
                         </Stack>
                     </Stack>
                 </Stack>

@@ -4,7 +4,6 @@ import { Animated, StyleSheet } from 'react-native'
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector ,useDispatch } from 'react-redux'
-import { signIn } from '../../redux/reducer/isSignIn'
 import { baseURL } from '../../api'
 import axios from 'axios'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -116,6 +115,7 @@ const ChangeTransPass = () => {
             height: 48,
             marginTop: 30,
             justifyContent: 'center',
+            marginLeft: 30,
         },
         cell: {
             marginHorizontal: 8,

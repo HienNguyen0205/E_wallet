@@ -132,7 +132,7 @@ const SetTransPass = () => {
     }
 
     return (
-        <Center w="100%" flex={1} backgroundColor='#272a3f' justifyContent='center'>
+        <Stack flex={1} backgroundColor='#272a3f' alignItems='center' justifyContent='center'>
             <Stack justifyContent='space-around' alignItems='center' space={4}>
                 <Logo />
                 <Text color='white' fontSize={32} fontWeight='bold' mt={6}>Create transaction pass</Text>
@@ -148,13 +148,13 @@ const SetTransPass = () => {
                     renderCell={renderCell}
                 />
             </Stack>
-            <Button mt={6} onPress={() => onSubmit()}>Create Password</Button>
+            <Button my={6} onPress={() => onSubmit()}>Create Password</Button>
             <Link _text={{
                 color: "indigo.500",
                 fontWeight: "medium",
                 fontSize: "md"
             }} onPress={() => navigate('Login')}>Back to Login</Link>
-        </Center>
+        </Stack>
     )
 }
 

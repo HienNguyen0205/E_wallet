@@ -87,7 +87,7 @@ const Register = () => {
                             rules={{
                                 required: 'Please enter email',
                                 pattern: {
-                                    value: '/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g',
+                                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
                                     message: 'Wrong email address format'
                                 }
                             }}

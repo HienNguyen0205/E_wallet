@@ -19,16 +19,15 @@ const carouselSrc = [
 
 const Home = () => {
 
-    const { name, balance, tel } = useSelector(state => state.userInfo.value)
+    const { name, balance, tel, email } = useSelector(state => state.userInfo.value)
     const dispatch = useDispatch()
 
     useEffect(() => {
+        const info = tel ? {phone: tel} : {email, email}
         axios({
             method: 'post',
             url: `http://${baseURL}:80/E_Wallet_API/api/user/userdetail.php`,
-            data: {
-                phone: tel,
-            }
+            data: info
         })
         .then(response => {
             const { name, email, birthday, address, createAt, balance } = response.data.data

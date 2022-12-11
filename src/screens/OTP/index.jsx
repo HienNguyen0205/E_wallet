@@ -80,11 +80,6 @@ const OTP = () => {
                     color: "indigo.500",
                     fontWeight: "medium",
                     fontSize: "md"
-                }}>Resend</Link>
-                <Link _text={{
-                    color: "indigo.500",
-                    fontWeight: "medium",
-                    fontSize: "md"
                 }} onPress={() => {
                     dispatch(setForgetPassState('email'))
                     navigate('Login')

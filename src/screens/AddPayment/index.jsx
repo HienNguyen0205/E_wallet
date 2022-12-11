@@ -28,7 +28,7 @@ const AddPayment = () => {
     const dispatch = useDispatch()
     const [payment, setPayment] = useState()
     const { navigate } = useNavigation()
-    const { control , handleSubmit, formState: {errors}, reset, register, setValue, watch } = useForm()
+    const { control , handleSubmit, formState: {errors}, reset, register, setValue } = useForm()
     const { email } = useSelector(state => state.userInfo.value)
     const cardList = useSelector(state => state.payMethod.value)
     const toast = useToast()

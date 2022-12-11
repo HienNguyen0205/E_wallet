@@ -33,26 +33,27 @@ const ForgetPass = () => {
     }
 
     const checkEmail = email => {
-
-        dispatch(toggleLoading())
-
-        axios({
-            method: 'post',
-            url: `http://${baseURL}:80/E_Wallet_API/api/user/getotp.php`,
-            data: {
-                email: email
-            }
-        })
-        .then(response => {
-            if (response.data.code === 0) {
-                dispatch(setForgetPassState('otp'))
-                dispatch(toggleLoading())
-                changeScreen('OTP')
-                dispatch(setUserInfo({
+        const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
+        if(regex.test(email)){
+            dispatch(toggleLoading())
+            axios({
+                method: 'post',
+                url: `http://${baseURL}:80/E_Wallet_API/api/user/getotp.php`,
+                data: {
                     email: email
-                }))
-            }
-        })
+                }
+            })
+            .then(response => {
+                if (response.data.code === 0) {
+                    dispatch(setForgetPassState('otp'))
+                    dispatch(toggleLoading())
+                    changeScreen('OTP')
+                    dispatch(setUserInfo({
+                        email: email
+                    }))
+                }
+            })
+        }
     }
 
     const changePass = pass => {
@@ -85,7 +86,7 @@ const ForgetPass = () => {
 
     const onSubmit = data => {
 
-        const { email, pass } = data
+        const { pass, email } = data
 
         if (forgetPassState === 'email') {
             checkEmail(email)
@@ -185,11 +186,6 @@ const ForgetPass = () => {
                         {forgetPassState === 'email' ? 'Continue' : 'Change password'}
                     </Button>
                     <Stack mt={6} space={4} alignItems='center'>
-                        <Link _text={{
-                            color: "indigo.500",
-                            fontWeight: "medium",
-                            fontSize: "md"
-                        }}>Resend</Link>
                         <Link _text={{
                             color: "indigo.500",
                             fontWeight: "medium",

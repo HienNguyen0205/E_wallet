@@ -10,6 +10,7 @@ const History = () => {
 
     const { email, balance } = useSelector(state => state.userInfo.value)
     const [data, setData] = useState([])
+    const [balanceInfo, setBalanceInfo] = useState({})
 
     useEffect(() => {
         axios({
@@ -26,6 +27,26 @@ const History = () => {
         })
     }, [balance, email])
 
+    useEffect(() => {
+        axios({
+            method: 'post',
+            url: `http://${baseURL}:80/E_Wallet_API/api/user/getchart.php`,
+            data: {
+                email: email,
+                datetype: 'Daily'
+            }
+        })
+        .then(response => {
+            if(response.data.code === 0){
+                const { deposit, withdraw, transferIn, transferOut, topupcard } = response.data.data[0]
+                setBalanceInfo({
+                    income: deposit + transferIn,
+                    expend: withdraw + transferOut + topupcard
+                })
+            }
+        })
+    }, [email, balance])
+
     return (
         <Stack flex={1} w='100%' p="4" py="6" bg='#171928'>
             <Box borderRadius='2xl' p={3} bg='#2e303c'>
@@ -41,7 +62,7 @@ const History = () => {
                             </Box>
                             <Stack justifyContent='space-between'>
                                 <Text color='#9f9fa5'>Income</Text>
-                                <Text color='white' fontSize={18}>$ 1000</Text>
+                                <Text color='white' fontSize={18}>$ {balanceInfo.income}</Text>
                             </Stack>
                         </Stack>
                     </Box>
@@ -51,8 +72,8 @@ const History = () => {
                                 <Icon as={Feather} name='arrow-down-right' size={23} color='white'/>
                             </Box>
                             <Stack justifyContent='space-between'>
-                                <Text color='#9f9fa5'>Outcome</Text>
-                                <Text color='white' fontSize={18}>$ 1000</Text>
+                                <Text color='#9f9fa5'>Expend</Text>
+                                <Text color='white' fontSize={18}>$ {balanceInfo.expend}</Text>
                             </Stack>
                         </Stack>
                     </Box>
