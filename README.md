@@ -19,7 +19,7 @@ C:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk
 C:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools
 
 - Cài đặt node-module
-Trong thư mục code bật terminal gõ lệnh: npm install --legacy-peer-deps
++ Trong thư mục code bật terminal gõ lệnh: npm install --legacy-peer-deps
 
 - Cài đặt API xampp
 + Tải xampp
