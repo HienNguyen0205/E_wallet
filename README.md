@@ -29,3 +29,4 @@ C:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools
 + Tìm địa chỉ IPv4 Address và copy
 + Vào file index.js trong thư mục api sửa đường dẫn ip (phần trước dấu :) thành ip vừa tìm được
 + Phần sau dấu : là port apache của xampp
++ Import file data.sql vào myphpadmin của xampp
