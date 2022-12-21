@@ -1,6 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, View, StyleSheet, Alert } from 'react-native'
 import { CurvedBottomBar } from 'react-native-curved-bottom-bar'
+import { useNavigation } from '@react-navigation/native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Home from '../../screens/Home'
 import History from '../../screens/History'
@@ -8,6 +9,8 @@ import Statistic from '../../screens/Statistic'
 import Setting from '../../screens/Setting'
 
 export const BottomNav = () => {
+
+  const { navigate } = useNavigation()
 
   const styles = StyleSheet.create({
     btnCircle: {
@@ -79,7 +82,7 @@ export const BottomNav = () => {
                 flex: 1,
                 justifyContent: 'center',
               }}
-              onPress={() => Alert.alert('This feather will available soon')}>
+              onPress={() => navigate('QRCamera')}>
               <Ionicons name={'qr-code-outline'} color="#ffffff" size={24} />
             </TouchableOpacity>
           </View>

@@ -17,6 +17,8 @@ import OTP from '../screens/OTP'
 import SetTransPass from '../screens/SetTransPass'
 import ForgetPass from '../screens/ForgetPass'
 import ChangeTransPass from '../screens/ChangeTransPass'
+import EditUserInfo from '../screens/EditUserInfo'
+import QRCamera from '../screens/QRCamera'
 
 const Stack = createNativeStackNavigator()
 
@@ -59,6 +61,8 @@ function AppNavigator() {
             <Stack.Screen name="UserInfo" component={UserInfo} options={opt} />
             <Stack.Screen name="ChangePass" component={ChangePass} options={opt} />
             <Stack.Screen name="ChangeTransPass" component={ChangeTransPass} options={opt} />
+            <Stack.Screen name="EditUserInfo" component={EditUserInfo} options={opt} />
+            <Stack.Screen name="QRCamera" component={QRCamera} options={opt} />
           </>
         ) : (
           <>

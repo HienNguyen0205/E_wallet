@@ -22,6 +22,10 @@ const Home = () => {
     const { name, balance, tel, email } = useSelector(state => state.userInfo.value)
     const dispatch = useDispatch()
 
+    const formatDate = date => {
+        return date.slice(8,10) + '-' + date.slice(5,7) + '-' + date.slice(0,4)
+    }
+
     useEffect(() => {
         const info = tel ? {phone: tel} : {email, email}
         axios({
@@ -34,13 +38,13 @@ const Home = () => {
             dispatch(setUserInfo({
                 name: name,
                 email: email,
-                birthday: birthday,
+                birthday: birthday ? formatDate(birthday) : '',
                 address: address,
                 createAt: createAt,
                 balance: balance,
             }))
         })
-    }, [tel])
+    }, [tel, email])
 
     return (
         <Stack flex={1} w='100%' p="4" py="6" bg='#171928'>
