@@ -35,6 +35,13 @@ const ForgetPass = () => {
     const checkEmail = email => {
         const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
         if(regex.test(email)){
+            const countDown = setTimeout(() => {
+                dispatch(toggleLoading())
+                toast.show({
+                    title: 'Can not send otp to this email address',
+                    duration: 2500
+                })
+            }, 30000)
             dispatch(toggleLoading())
             axios({
                 method: 'post',
@@ -45,6 +52,7 @@ const ForgetPass = () => {
             })
             .then(response => {
                 if (response.data.code === 0) {
+                    clearTimeout(countDown)
                     dispatch(setForgetPassState('otp'))
                     dispatch(toggleLoading())
                     changeScreen('OTP')

@@ -140,8 +140,8 @@ const Register = () => {
                             rules={{
                                 required: 'Please enter password',
                                 pattern: {
-                                    value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                                    message: 'Password must contain minimum eight characters, at least one letter, one number'
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+                                    message: 'Password must contain minimum eight characters, at least one upcase letter, one number'
                                 }
                             }}
                         />

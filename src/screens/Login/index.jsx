@@ -111,7 +111,7 @@ const Login = () => {
                             rules={{
                                 required: 'Please enter password',
                                 pattern: {
-                                    value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
                                     message: 'Wrong password'
                                 }
                             }}
@@ -120,7 +120,7 @@ const Login = () => {
                             {errors.password?.message}
                         </FormControl.ErrorMessage>
                         <Link _text={{
-                                fontSize: "xs",
+                                fontSize: "sm",
                                 fontWeight: "500",
                                 color: "indigo.500"
                             }} alignSelf="flex-end" mt="1" isUnderlined={false} onPress={() => navigate('ForgetPass')}>
