@@ -67,7 +67,7 @@ const Statistic = () => {
         const fiveDays = []
         for(let i = 0; i < 5;i++){
             date.setDate(date.getDate() + 1)
-            fiveDays.push(date.getDate()+'/'+date.getMonth())
+            fiveDays.push(date.getDate()+'/'+(date.getMonth() + 1))
         }
         return fiveDays
     }
